@@ -45,6 +45,10 @@ class AddCommandButton extends StatelessWidget {
         child: Text('Wait Command'),
       ),
       const PopupMenuItem(
+        value: 'condition',
+        child: Text('Named Condition'),
+      ),
+      const PopupMenuItem(
         value: 'sequential',
         child: Text('Sequential Command Group'),
       ),
@@ -59,6 +63,10 @@ class AddCommandButton extends StatelessWidget {
       const PopupMenuItem(
         value: 'race',
         child: Text('Parallel Race Group'),
+      ),
+      const PopupMenuItem(
+        value: 'condtional',
+        child: Text('Condtional Command Group'),
       ),
     ];
   }

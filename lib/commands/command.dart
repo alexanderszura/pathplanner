@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:pathplanner/commands/command_groups.dart';
+import 'package:pathplanner/commands/conditional_command.dart';
 import 'package:pathplanner/commands/named_command.dart';
+import 'package:pathplanner/commands/named_condition.dart';
 import 'package:pathplanner/commands/none_command.dart';
 import 'package:pathplanner/commands/path_command.dart';
 import 'package:pathplanner/commands/wait_command.dart';
@@ -35,7 +37,9 @@ abstract class Command {
       return NamedCommand.fromDataJson(json['data'] ?? {});
     } else if (type == 'path') {
       return PathCommand.fromDataJson(json['data'] ?? {});
-    } else if (type == 'sequential') {
+    } else if (type == 'condition') {
+      return NamedCondition.fromDataJson(json['data'] ?? {});
+    }else if (type == 'sequential') {
       return SequentialCommandGroup.fromDataJson(json['data'] ?? {});
     } else if (type == 'parallel') {
       return ParallelCommandGroup.fromDataJson(json['data'] ?? {});
@@ -43,6 +47,8 @@ abstract class Command {
       return RaceCommandGroup.fromDataJson(json['data'] ?? {});
     } else if (type == 'deadline') {
       return DeadlineCommandGroup.fromDataJson(json['data'] ?? {});
+    } else if (type == 'conditonal') {
+      return ConditionalCommandGroup.fromDataJson(json['data'] ?? {});
     }
 
     return const NoneCommand();
@@ -55,6 +61,8 @@ abstract class Command {
       return WaitCommand();
     } else if (type == 'path') {
       return PathCommand();
+    } else if (type == 'condition') {
+      return NamedCondition();
     } else if (type == 'sequential') {
       return SequentialCommandGroup(commands: commands ?? []);
     } else if (type == 'parallel') {
@@ -63,6 +71,8 @@ abstract class Command {
       return RaceCommandGroup(commands: commands ?? []);
     } else if (type == 'deadline') {
       return DeadlineCommandGroup(commands: commands ?? []);
+    } else if (type == 'condtional') {
+      return ConditionalCommandGroup(commands: commands ?? []);
     }
 
     return const NoneCommand();
