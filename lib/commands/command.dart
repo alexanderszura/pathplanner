@@ -8,8 +8,6 @@ import 'package:pathplanner/commands/path_command.dart';
 import 'package:pathplanner/commands/wait_command.dart';
 
 abstract class Command {
-  static Set<String> named = {};
-
   final String type;
 
   const Command({
@@ -28,7 +26,7 @@ abstract class Command {
     };
   }
 
-  static Command fromJson(Map<String, dynamic> json) {
+  static Command? fromJson(Map<String, dynamic> json) {
     String? type = json['type'];
 
     if (type == 'wait') {
@@ -51,10 +49,10 @@ abstract class Command {
       return ConditionalCommandGroup.fromDataJson(json['data'] ?? {});
     }
 
-    return const NoneCommand();
+    return null;
   }
 
-  static Command fromType(String type, {List<Command>? commands}) {
+  static Command? fromType(String type, {List<Command>? commands}) {
     if (type == 'named') {
       return NamedCommand();
     } else if (type == 'wait') {
@@ -75,6 +73,6 @@ abstract class Command {
       return ConditionalCommandGroup(commands: commands ?? []);
     }
 
-    return const NoneCommand();
+    return null;
   }
 }

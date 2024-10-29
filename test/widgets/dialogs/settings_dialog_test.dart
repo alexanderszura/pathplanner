@@ -6,6 +6,8 @@ import 'package:pathplanner/widgets/field_image.dart';
 import 'package:pathplanner/widgets/number_text_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../test_helpers.dart';
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -24,9 +26,10 @@ void main() {
       PrefsKeys.robotTrackwidth: 0.6,
       PrefsKeys.driveWheelRadius: 0.05,
       PrefsKeys.driveGearing: 5.143,
-      PrefsKeys.maxDriveRPM: 5600.0,
+      PrefsKeys.maxDriveSpeed: 5.4,
       PrefsKeys.wheelCOF: 1.2,
-      PrefsKeys.torqueCurve: 'KRAKEN_60A',
+      PrefsKeys.driveMotor: 'krakenX60',
+      PrefsKeys.driveCurrentLimit: 60.0,
       PrefsKeys.holonomicMode: true,
       PrefsKeys.hotReloadEnabled: true,
       PrefsKeys.teamColor: Colors.black.value,
@@ -35,6 +38,7 @@ void main() {
       PrefsKeys.defaultMaxAccel: 2.0,
       PrefsKeys.defaultMaxAngVel: 3.0,
       PrefsKeys.defaultMaxAngAccel: 4.0,
+      PrefsKeys.defaultNominalVoltage: 12.0,
     });
     prefs = await SharedPreferences.getInstance();
     settingsChanged = false;
@@ -43,7 +47,8 @@ void main() {
   });
 
   testWidgets('bumper width text field', (widgetTester) async {
-    await widgetTester.binding.setSurfaceSize(const Size(1280, 720));
+    FlutterError.onError = ignoreOverflowErrors;
+    await widgetTester.binding.setSurfaceSize(const Size(1280, 800));
 
     await widgetTester.pumpWidget(MaterialApp(
       home: Scaffold(
@@ -73,7 +78,8 @@ void main() {
   });
 
   testWidgets('bumper length text field', (widgetTester) async {
-    await widgetTester.binding.setSurfaceSize(const Size(1280, 720));
+    FlutterError.onError = ignoreOverflowErrors;
+    await widgetTester.binding.setSurfaceSize(const Size(1280, 800));
 
     await widgetTester.pumpWidget(MaterialApp(
       home: Scaffold(
@@ -103,7 +109,8 @@ void main() {
   });
 
   testWidgets('robot mass text field', (widgetTester) async {
-    await widgetTester.binding.setSurfaceSize(const Size(1280, 720));
+    FlutterError.onError = ignoreOverflowErrors;
+    await widgetTester.binding.setSurfaceSize(const Size(1280, 800));
 
     await widgetTester.pumpWidget(MaterialApp(
       home: Scaffold(
@@ -133,7 +140,8 @@ void main() {
   });
 
   testWidgets('robot moi text field', (widgetTester) async {
-    await widgetTester.binding.setSurfaceSize(const Size(1280, 720));
+    FlutterError.onError = ignoreOverflowErrors;
+    await widgetTester.binding.setSurfaceSize(const Size(1280, 800));
 
     await widgetTester.pumpWidget(MaterialApp(
       home: Scaffold(
@@ -163,7 +171,8 @@ void main() {
   });
 
   testWidgets('robot wheelbase text field', (widgetTester) async {
-    await widgetTester.binding.setSurfaceSize(const Size(1280, 720));
+    FlutterError.onError = ignoreOverflowErrors;
+    await widgetTester.binding.setSurfaceSize(const Size(1280, 800));
 
     await widgetTester.pumpWidget(MaterialApp(
       home: Scaffold(
@@ -193,7 +202,8 @@ void main() {
   });
 
   testWidgets('robot trackwidth text field', (widgetTester) async {
-    await widgetTester.binding.setSurfaceSize(const Size(1280, 720));
+    FlutterError.onError = ignoreOverflowErrors;
+    await widgetTester.binding.setSurfaceSize(const Size(1280, 800));
 
     await widgetTester.pumpWidget(MaterialApp(
       home: Scaffold(
@@ -223,7 +233,8 @@ void main() {
   });
 
   testWidgets('wheel radius text field', (widgetTester) async {
-    await widgetTester.binding.setSurfaceSize(const Size(1280, 720));
+    FlutterError.onError = ignoreOverflowErrors;
+    await widgetTester.binding.setSurfaceSize(const Size(1280, 800));
 
     await widgetTester.pumpWidget(MaterialApp(
       home: Scaffold(
@@ -253,7 +264,8 @@ void main() {
   });
 
   testWidgets('drive gearing text field', (widgetTester) async {
-    await widgetTester.binding.setSurfaceSize(const Size(1280, 720));
+    FlutterError.onError = ignoreOverflowErrors;
+    await widgetTester.binding.setSurfaceSize(const Size(1280, 800));
 
     await widgetTester.pumpWidget(MaterialApp(
       home: Scaffold(
@@ -282,8 +294,9 @@ void main() {
     expect(prefs.getDouble(PrefsKeys.driveGearing), 1.0);
   });
 
-  testWidgets('max RPM text field', (widgetTester) async {
-    await widgetTester.binding.setSurfaceSize(const Size(1280, 720));
+  testWidgets('max drive speed field', (widgetTester) async {
+    FlutterError.onError = ignoreOverflowErrors;
+    await widgetTester.binding.setSurfaceSize(const Size(1280, 800));
 
     await widgetTester.pumpWidget(MaterialApp(
       home: Scaffold(
@@ -298,10 +311,11 @@ void main() {
       ),
     ));
 
-    final textField = find.widgetWithText(NumberTextField, 'Max Drive RPM');
+    final textField =
+        find.widgetWithText(NumberTextField, 'True Max Drive Speed (M/S)');
 
     expect(textField, findsOneWidget);
-    expect(find.descendant(of: textField, matching: find.text('5600')),
+    expect(find.descendant(of: textField, matching: find.text('5.400')),
         findsOneWidget);
 
     await widgetTester.enterText(textField, '1.0');
@@ -309,11 +323,12 @@ void main() {
     await widgetTester.pump();
 
     expect(settingsChanged, true);
-    expect(prefs.getDouble(PrefsKeys.maxDriveRPM), 1.0);
+    expect(prefs.getDouble(PrefsKeys.maxDriveSpeed), 1.0);
   });
 
   testWidgets('wheel cof text field', (widgetTester) async {
-    await widgetTester.binding.setSurfaceSize(const Size(1280, 720));
+    FlutterError.onError = ignoreOverflowErrors;
+    await widgetTester.binding.setSurfaceSize(const Size(1280, 800));
 
     await widgetTester.pumpWidget(MaterialApp(
       home: Scaffold(
@@ -331,7 +346,7 @@ void main() {
     final textField = find.widgetWithText(NumberTextField, 'Wheel COF');
 
     expect(textField, findsOneWidget);
-    expect(find.descendant(of: textField, matching: find.text('1.20')),
+    expect(find.descendant(of: textField, matching: find.text('1.200')),
         findsOneWidget);
 
     await widgetTester.enterText(textField, '1.0');
@@ -343,7 +358,8 @@ void main() {
   });
 
   testWidgets('drive motor dropdown', (widgetTester) async {
-    await widgetTester.binding.setSurfaceSize(const Size(1280, 720));
+    FlutterError.onError = ignoreOverflowErrors;
+    await widgetTester.binding.setSurfaceSize(const Size(1280, 800));
 
     await widgetTester.pumpWidget(MaterialApp(
       home: Scaffold(
@@ -374,13 +390,14 @@ void main() {
     await widgetTester.pumpAndSettle();
 
     expect(settingsChanged, true);
-    expect(prefs.getString(PrefsKeys.torqueCurve), 'KRAKENFOC_60A');
+    expect(prefs.getString(PrefsKeys.driveMotor), 'krakenX60FOC');
     expect(find.text('Kraken X60 FOC'), findsOneWidget);
     expect(find.text('Kraken X60'), findsNothing);
   });
 
-  testWidgets('current limit dropdown', (widgetTester) async {
-    await widgetTester.binding.setSurfaceSize(const Size(1280, 720));
+  testWidgets('current limit field', (widgetTester) async {
+    FlutterError.onError = ignoreOverflowErrors;
+    await widgetTester.binding.setSurfaceSize(const Size(1280, 800));
 
     await widgetTester.pumpWidget(MaterialApp(
       home: Scaffold(
@@ -395,31 +412,24 @@ void main() {
       ),
     ));
 
-    final dropdown = find.byType(DropdownButton<String>).last;
+    final textField =
+        find.widgetWithText(NumberTextField, 'Drive Current Limit (A)');
 
-    expect(dropdown, findsOneWidget);
-    expect(find.descendant(of: dropdown, matching: find.text('60A')),
+    expect(textField, findsOneWidget);
+    expect(find.descendant(of: textField, matching: find.text('60')),
         findsOneWidget);
 
-    await widgetTester.tap(dropdown);
-    await widgetTester.pumpAndSettle();
-
-    expect(find.text('40A'), findsOneWidget);
-    expect(find.text('60A'), findsWidgets);
-    expect(find.text('80A'), findsOneWidget);
-
-    await widgetTester.tap(find.text('80A'));
-    await widgetTester.pumpAndSettle();
+    await widgetTester.enterText(textField, '1.0');
+    await widgetTester.testTextInput.receiveAction(TextInputAction.done);
+    await widgetTester.pump();
 
     expect(settingsChanged, true);
-    expect(prefs.getString(PrefsKeys.torqueCurve), 'KRAKEN_80A');
-    expect(find.text('40A'), findsNothing);
-    expect(find.text('60A'), findsNothing);
-    expect(find.text('80A'), findsOneWidget);
+    expect(prefs.getDouble(PrefsKeys.driveCurrentLimit), 1.0);
   });
 
   testWidgets('default max vel text field', (widgetTester) async {
-    await widgetTester.binding.setSurfaceSize(const Size(1280, 720));
+    FlutterError.onError = ignoreOverflowErrors;
+    await widgetTester.binding.setSurfaceSize(const Size(1280, 800));
 
     await widgetTester.pumpWidget(MaterialApp(
       home: Scaffold(
@@ -438,7 +448,7 @@ void main() {
         find.widgetWithText(NumberTextField, 'Max Velocity (M/S)');
 
     expect(textField, findsOneWidget);
-    expect(find.descendant(of: textField, matching: find.text('1.00')),
+    expect(find.descendant(of: textField, matching: find.text('1.000')),
         findsOneWidget);
 
     await widgetTester.enterText(textField, '1.1');
@@ -450,7 +460,8 @@ void main() {
   });
 
   testWidgets('default max accel text field', (widgetTester) async {
-    await widgetTester.binding.setSurfaceSize(const Size(1280, 720));
+    FlutterError.onError = ignoreOverflowErrors;
+    await widgetTester.binding.setSurfaceSize(const Size(1280, 800));
 
     await widgetTester.pumpWidget(MaterialApp(
       home: Scaffold(
@@ -469,7 +480,7 @@ void main() {
         find.widgetWithText(NumberTextField, 'Max Acceleration (M/S²)');
 
     expect(textField, findsOneWidget);
-    expect(find.descendant(of: textField, matching: find.text('2.00')),
+    expect(find.descendant(of: textField, matching: find.text('2.000')),
         findsOneWidget);
 
     await widgetTester.enterText(textField, '2.2');
@@ -481,7 +492,8 @@ void main() {
   });
 
   testWidgets('default max ang vel text field', (widgetTester) async {
-    await widgetTester.binding.setSurfaceSize(const Size(1280, 720));
+    FlutterError.onError = ignoreOverflowErrors;
+    await widgetTester.binding.setSurfaceSize(const Size(1280, 800));
 
     await widgetTester.pumpWidget(MaterialApp(
       home: Scaffold(
@@ -500,7 +512,7 @@ void main() {
         find.widgetWithText(NumberTextField, 'Max Angular Velocity (Deg/S)');
 
     expect(textField, findsOneWidget);
-    expect(find.descendant(of: textField, matching: find.text('3.00')),
+    expect(find.descendant(of: textField, matching: find.text('3.000')),
         findsOneWidget);
 
     await widgetTester.enterText(textField, '3.3');
@@ -512,7 +524,8 @@ void main() {
   });
 
   testWidgets('default max ang accel text field', (widgetTester) async {
-    await widgetTester.binding.setSurfaceSize(const Size(1280, 720));
+    FlutterError.onError = ignoreOverflowErrors;
+    await widgetTester.binding.setSurfaceSize(const Size(1280, 800));
 
     await widgetTester.pumpWidget(MaterialApp(
       home: Scaffold(
@@ -531,7 +544,7 @@ void main() {
         find.widgetWithText(NumberTextField, 'Max Angular Accel (Deg/S²)');
 
     expect(textField, findsOneWidget);
-    expect(find.descendant(of: textField, matching: find.text('4.00')),
+    expect(find.descendant(of: textField, matching: find.text('4.000')),
         findsOneWidget);
 
     await widgetTester.enterText(textField, '4.4');
@@ -542,8 +555,41 @@ void main() {
     expect(prefs.getDouble(PrefsKeys.defaultMaxAngAccel), 4.4);
   });
 
+  testWidgets('default voltage text field', (widgetTester) async {
+    FlutterError.onError = ignoreOverflowErrors;
+    await widgetTester.binding.setSurfaceSize(const Size(1280, 800));
+
+    await widgetTester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: SettingsDialog(
+          onSettingsChanged: () => settingsChanged = true,
+          onFieldSelected: (value) => selectedField = value,
+          fieldImages: FieldImage.offialFields(),
+          selectedField: FieldImage.official(OfficialField.chargedUp),
+          prefs: prefs,
+          onTeamColorChanged: (value) => teamColor = value,
+        ),
+      ),
+    ));
+
+    final textField =
+        find.widgetWithText(NumberTextField, 'Nominal Voltage (Volts)');
+
+    expect(textField, findsOneWidget);
+    expect(find.descendant(of: textField, matching: find.text('12.000')),
+        findsOneWidget);
+
+    await widgetTester.enterText(textField, '10.0');
+    await widgetTester.testTextInput.receiveAction(TextInputAction.done);
+    await widgetTester.pump();
+
+    expect(settingsChanged, true);
+    expect(prefs.getDouble(PrefsKeys.defaultNominalVoltage), 10.0);
+  });
+
   testWidgets('field image dropdown', (widgetTester) async {
-    await widgetTester.binding.setSurfaceSize(const Size(1280, 720));
+    FlutterError.onError = ignoreOverflowErrors;
+    await widgetTester.binding.setSurfaceSize(const Size(1280, 800));
 
     await widgetTester.pumpWidget(MaterialApp(
       home: Scaffold(
@@ -580,7 +626,8 @@ void main() {
   });
 
   testWidgets('team color picker', (widgetTester) async {
-    await widgetTester.binding.setSurfaceSize(const Size(1280, 720));
+    FlutterError.onError = ignoreOverflowErrors;
+    await widgetTester.binding.setSurfaceSize(const Size(1280, 800));
 
     await widgetTester.pumpWidget(MaterialApp(
       home: Scaffold(
@@ -615,7 +662,8 @@ void main() {
   });
 
   testWidgets('telemetry host text field', (widgetTester) async {
-    await widgetTester.binding.setSurfaceSize(const Size(1280, 720));
+    FlutterError.onError = ignoreOverflowErrors;
+    await widgetTester.binding.setSurfaceSize(const Size(1280, 800));
 
     await widgetTester.pumpWidget(MaterialApp(
       home: Scaffold(
@@ -646,7 +694,8 @@ void main() {
   });
 
   testWidgets('holonomic mode chip', (widgetTester) async {
-    await widgetTester.binding.setSurfaceSize(const Size(1280, 720));
+    FlutterError.onError = ignoreOverflowErrors;
+    await widgetTester.binding.setSurfaceSize(const Size(1280, 800));
 
     await widgetTester.pumpWidget(MaterialApp(
       home: Scaffold(
@@ -678,7 +727,8 @@ void main() {
   });
 
   testWidgets('hot reload chip', (widgetTester) async {
-    await widgetTester.binding.setSurfaceSize(const Size(1280, 720));
+    FlutterError.onError = ignoreOverflowErrors;
+    await widgetTester.binding.setSurfaceSize(const Size(1280, 800));
 
     await widgetTester.pumpWidget(MaterialApp(
       home: Scaffold(

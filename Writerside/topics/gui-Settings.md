@@ -4,22 +4,24 @@ The settings menu can be accessed via the [Navigation Menu](gui-Navigation-Menu.
 
 <img src="settings.png" alt="settings" border-effect="rounded"/>
 
-## Robot Attributes
+## Robot Config & Module Config
 
-Robot Width
+Bumper Width
 : The width of the robot, including bumpers, in meters. Used for visualization.
 
-Robot Length
+Bumper Length
 : The length of the robot, including bumpers, in meters. Used for visualization.
 
-Max Module Speed
-: The max speed of a swerve module in meters per second. This does not directly affect paths, but will make the robot's
-rotation speed in previews more closely match reality.
+See [](Robot-Config.md) for Robot/Module Configuration options and how to find them.
 
 ## Default Constraints
 
 These values will be used as the default global constraints when creating new paths. Updating these values will also
 update the constraints of any paths set to use the defaults.
+
+The default constraints do not support being unlimited, as a conscious decision should be made per-path to have
+unlimited constraints. Running a path as fast as possible is not only dangerous, but can lead to the path following
+controller falling behind.
 
 Max Velocity
 : Max linear velocity in meters per second.
